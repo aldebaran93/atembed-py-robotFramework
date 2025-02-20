@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<robot generator="Robot 7.2.2 (Python 3.12.9 on win32)" generated="2025-02-20T22:00:31.937724" rpa="false" schemaversion="5">
+<suite id="s1" name="atembed-py-robotFramework" source="C:\Users\leots\OneDrive\Desktop\windows-linux\Atembedd\atembed-py-robotFramework">
+<suite id="s1-s1" name="Atembedd Release Suite" source="C:\Users\leots\OneDrive\Desktop\windows-linux\Atembedd\atembed-py-robotFramework\Atembedd_Release_Suite">
+<suite id="s1-s1-s1" name="01 TCASE WEB REQUEST SELENIUM" source="C:\Users\leots\OneDrive\Desktop\windows-linux\Atembedd\atembed-py-robotFramework\Atembedd_Release_Suite\01_TCASE_WEB_REQUEST_SELENIUM">
+<suite id="s1-s1-s1-s1" name="01 TCASE WEB REQUEST SELENIUM" source="C:\Users\leots\OneDrive\Desktop\windows-linux\Atembedd\atembed-py-robotFramework\Atembedd_Release_Suite\01_TCASE_WEB_REQUEST_SELENIUM\01_TCASE_WEB_REQUEST_SELENIUM.robot">
+<test id="s1-s1-s1-s1-t1" name="TCASE_WEB_REQUEST_SELENIUM" line="14">
+<kw name="Open Browser" owner="SeleniumLibrary">
+<msg time="2025-02-20T22:00:32.416693" level="INFO">Opening browser 'edge' to base url 'https://www.bing.com/'.</msg>
+<arg>${URL}</arg>
+<arg>edge</arg>
+<doc>Opens a new browser instance to the optional ``url``.</doc>
+<status status="PASS" start="2025-02-20T22:00:32.416693" elapsed="3.978231"/>
+</kw>
+<kw name="Maximize Browser Window" owner="SeleniumLibrary">
+<doc>Maximizes current browser window.</doc>
+<status status="PASS" start="2025-02-20T22:00:36.396928" elapsed="0.095109"/>
+</kw>
+<kw name="Input Text" owner="SeleniumLibrary">
+<msg time="2025-02-20T22:00:36.496383" level="INFO">Typing text 'Selenium' into text field 'name=q'.</msg>
+<arg>name=q</arg>
+<arg>Selenium</arg>
+<doc>Types the given ``text`` into the text field identified by ``locator``.</doc>
+<status status="PASS" start="2025-02-20T22:00:36.494057" elapsed="0.136497"/>
+</kw>
+<kw name="Capture Page Screenshot" owner="SeleniumLibrary">
+<msg time="2025-02-20T22:00:37.322029" level="INFO" html="true">&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td colspan="3"&gt;&lt;a href="selenium-screenshot-7.png"&gt;&lt;img src="selenium-screenshot-7.png" width="800px"&gt;&lt;/a&gt;</msg>
+<doc>Takes a screenshot of the current page and embeds it into a log file.</doc>
+<status status="PASS" start="2025-02-20T22:00:36.631598" elapsed="0.691433"/>
+</kw>
+<kw name="Close Browser" owner="SeleniumLibrary">
+<doc>Closes the current browser.</doc>
+<status status="PASS" start="2025-02-20T22:00:37.324027" elapsed="2.321491"/>
+</kw>
+<doc>TCASE_WEB_REQUEST_SELENIUM</doc>
+<status status="PASS" start="2025-02-20T22:00:32.413692" elapsed="7.232804"/>
+</test>
+<status status="PASS" start="2025-02-20T22:00:31.977943" elapsed="7.672504"/>
+</suite>
+<status status="PASS" start="2025-02-20T22:00:31.973942" elapsed="7.681500"/>
+</suite>
+<status status="PASS" start="2025-02-20T22:00:31.969946" elapsed="7.687888"/>
+</suite>
+<status status="PASS" start="2025-02-20T22:00:31.943419" elapsed="7.716414"/>
+</suite>
+<statistics>
+<total>
+<stat pass="1" fail="0" skip="0">All Tests</stat>
+</total>
+<tag>
+</tag>
+<suite>
+<stat name="atembed-py-robotFramework" id="s1" pass="1" fail="0" skip="0">atembed-py-robotFramework</stat>
+<stat name="Atembedd Release Suite" id="s1-s1" pass="1" fail="0" skip="0">atembed-py-robotFramework.Atembedd Release Suite</stat>
+<stat name="01 TCASE WEB REQUEST SELENIUM" id="s1-s1-s1" pass="1" fail="0" skip="0">atembed-py-robotFramework.Atembedd Release Suite.01 TCASE WEB REQUEST SELENIUM</stat>
+<stat name="01 TCASE WEB REQUEST SELENIUM" id="s1-s1-s1-s1" pass="1" fail="0" skip="0">atembed-py-robotFramework.Atembedd Release Suite.01 TCASE WEB REQUEST SELENIUM.01 TCASE WEB REQUEST SELENIUM</stat>
+</suite>
+</statistics>
+<errors>
+</errors>
+</robot>
