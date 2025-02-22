@@ -2,7 +2,7 @@
 Library    SeleniumLibrary
 
 *** Variables ***
-${URL}    https://www.embeff.com/
+${URL}    https://atemb-website.vercel.app/
 
 *** Test Cases ***
 TCASE_WEB_REQUEST_SELENIUM_OPEN_EMBEFF_WEBSITE
@@ -16,7 +16,7 @@ TCASE_WEB_REQUEST_SELENIUM_OPEN_EMBEFF_WEBSITE
     ...    @author: Atembedd
     ...    @version: 1.0
     ...    @last_updated: 2025-01-01
-    [Tags]    web    request    selenium    embeff
+    [Tags]    web    request    selenium    atemb
     [Setup]    Open Browser    ${URL}    edge
     Maximize Browser Window
     Capture Page Screenshot
