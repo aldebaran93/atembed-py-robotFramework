@@ -37,6 +37,6 @@ TCASE_WEB_REQUEST_SELENIUM_SEND_MESSAGE_TO_ATEMB_COMPANY
     ELSE
         Log    Output folder is not set
         Create Dictionary    ${OUTPUT_FOLDER}
-        Capture Page Screenshot    ${SCREENSHOT_FILE}    
+        Capture Page Screenshot    ${SCREENSHOT_FILE}
     END
     [Teardown]    Close Browser
