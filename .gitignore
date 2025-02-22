@@ -1,2 +1,9 @@
-reults/*html*
-reults/*xml*
+# Ignore Robot Framework result files
+results/output.xml
+results/log.html
+# Ignore Robot Framework cache files
+.cache/
+# Ignore Robot Framework logs
+*.log
+# Ignore Robot Framework screenshots
+*.png
