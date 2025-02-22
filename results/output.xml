@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<robot generator="Robot 7.2.2 (Python 3.12.9 on win32)" generated="2025-02-22T14:13:21.320085" rpa="false" schemaversion="5">
+<suite id="s1" name="atembed-py-robotFramework" source="C:\Users\leots\OneDrive\Desktop\windows-linux\Atemb\atembed-py-robotFramework">
+<suite id="s1-s1" name="Atemb Release Suite" source="C:\Users\leots\OneDrive\Desktop\windows-linux\Atemb\atembed-py-robotFramework\Atemb_Release_Suite">
+<suite id="s1-s1-s1" name="01 TCASE WEB REQUEST SELENIUM" source="C:\Users\leots\OneDrive\Desktop\windows-linux\Atemb\atembed-py-robotFramework\Atemb_Release_Suite\01_TCASE_WEB_REQUEST_SELENIUM">
+<suite id="s1-s1-s1-s1" name="03 TCASE WEB REQUEST SELENIUM SEND MESSAGE TO ATEMB COMPANY" source="C:\Users\leots\OneDrive\Desktop\windows-linux\Atemb\atembed-py-robotFramework\Atemb_Release_Suite\01_TCASE_WEB_REQUEST_SELENIUM\03_TCASE_WEB_REQUEST_SELENIUM_SEND_MESSAGE_TO_ATEMB_COMPANY.robot">
+<test id="s1-s1-s1-s1-t1" name="TCASE_WEB_REQUEST_SELENIUM_SEND_MESSAGE_TO_ATEMB_COMPANY" line="16">
+<kw name="Open Browser" owner="SeleniumLibrary" type="SETUP">
+<msg time="2025-02-22T14:13:21.734978" level="INFO">Opening browser 'edge' to base url 'https://atemb-website.vercel.app/'.</msg>
+<arg>${URL}</arg>
+<arg>edge</arg>
+<doc>Opens a new browser instance to the optional ``url``.</doc>
+<status status="PASS" start="2025-02-22T14:13:21.734978" elapsed="2.411962"/>
+</kw>
+<kw name="Maximize Browser Window" owner="SeleniumLibrary">
+<doc>Maximizes current browser window.</doc>
+<status status="PASS" start="2025-02-22T14:13:24.148091" elapsed="0.056028"/>
+</kw>
+<kw name="Input Text" owner="SeleniumLibrary">
+<msg time="2025-02-22T14:13:24.207129" level="INFO">Typing text 'BETE' into text field 'xpath=//input[@name="surname"]'.</msg>
+<arg>${SURNAME_FIELD}</arg>
+<arg>BETE</arg>
+<doc>Types the given ``text`` into the text field identified by ``locator``.</doc>
+<status status="PASS" start="2025-02-22T14:13:24.205129" elapsed="0.262453"/>
+</kw>
+<kw name="Input Text" owner="SeleniumLibrary">
+<msg time="2025-02-22T14:13:24.472438" level="INFO">Typing text 'Sylvie' into text field 'xpath=//input[@name="name"]'.</msg>
+<arg>${NAME_FIELD}</arg>
+<arg>Sylvie</arg>
+<doc>Types the given ``text`` into the text field identified by ``locator``.</doc>
+<status status="PASS" start="2025-02-22T14:13:24.469679" elapsed="0.141657"/>
+</kw>
+<kw name="Input Text" owner="SeleniumLibrary">
+<msg time="2025-02-22T14:13:24.612334" level="INFO">Typing text 'sylviebete2706@yahoo.com' into text field 'xpath=//input[@name="email"]'.</msg>
+<arg>${EMAIL_FIELD}</arg>
+<arg>sylviebete2706@yahoo.com</arg>
+<doc>Types the given ``text`` into the text field identified by ``locator``.</doc>
+<status status="PASS" start="2025-02-22T14:13:24.612334" elapsed="0.147941"/>
+</kw>
+<kw name="Input Text" owner="SeleniumLibrary">
+<msg time="2025-02-22T14:13:24.762821" level="INFO">Typing text 'Hello Atemb! I am Sylvie BETE. I would like to know more about your services.' into text field 'xpath=//textarea[@name="message"]'.</msg>
+<arg>${MESSAGE_FIELD}</arg>
+<arg>Hello Atemb! I am Sylvie BETE. I would like to know more about your services.</arg>
+<doc>Types the given ``text`` into the text field identified by ``locator``.</doc>
+<status status="PASS" start="2025-02-22T14:13:24.761724" elapsed="0.300636"/>
+</kw>
+<kw name="Click Button" owner="SeleniumLibrary">
+<msg time="2025-02-22T14:13:25.064373" level="INFO">Clicking button 'xpath=//button[contains(text(),'Send Message')]'.</msg>
+<arg>${SEND_BUTTON}</arg>
+<doc>Clicks the button identified by ``locator``.</doc>
+<status status="PASS" start="2025-02-22T14:13:25.063371" elapsed="0.135682"/>
+</kw>
+<if>
+<branch type="IF" condition="$OUTPUT_FOLDER">
+<kw name="Capture Page Screenshot" owner="SeleniumLibrary">
+<msg time="2025-02-22T14:13:25.386379" level="INFO" html="true">&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td colspan="3"&gt;&lt;a href="../Atemb_Release_Suite/01_TCASE_WEB_REQUEST_SELENIUM/output/Atemb_Website.png"&gt;&lt;img src="../Atemb_Release_Suite/01_TCASE_WEB_REQUEST_SELENIUM/output/Atemb_Website.png" width="800px"&gt;&lt;/a&gt;</msg>
+<arg>${SCREENSHOT_FILE}</arg>
+<doc>Takes a screenshot of the current page and embeds it into a log file.</doc>
+<status status="PASS" start="2025-02-22T14:13:25.203050" elapsed="0.184330"/>
+</kw>
+<status status="PASS" start="2025-02-22T14:13:25.201093" elapsed="0.186287"/>
+</branch>
+<branch type="ELSE">
+<kw name="Log" owner="BuiltIn">
+<arg>Output folder is not set</arg>
+<doc>Logs the given message with the given level.</doc>
+<status status="NOT RUN" start="2025-02-22T14:13:25.388380" elapsed="0.000000"/>
+</kw>
+<kw name="Create Dictionary" owner="BuiltIn">
+<arg>${OUTPUT_FOLDER}</arg>
+<doc>Creates and returns a dictionary based on the given ``items``.</doc>
+<status status="NOT RUN" start="2025-02-22T14:13:25.389494" elapsed="0.000000"/>
+</kw>
+<kw name="Capture Page Screenshot" owner="SeleniumLibrary">
+<arg>${SCREENSHOT_FILE}</arg>
+<doc>Takes a screenshot of the current page and embeds it into a log file.</doc>
+<status status="NOT RUN" start="2025-02-22T14:13:25.390511" elapsed="0.000000"/>
+</kw>
+<status status="NOT RUN" start="2025-02-22T14:13:25.387380" elapsed="0.003131"/>
+</branch>
+<status status="PASS" start="2025-02-22T14:13:25.201093" elapsed="0.189418"/>
+</if>
+<kw name="Close Browser" owner="SeleniumLibrary" type="TEARDOWN">
+<doc>Closes the current browser.</doc>
+<status status="PASS" start="2025-02-22T14:13:25.392004" elapsed="2.313297"/>
+</kw>
+<doc>Copyright details, 2025 Atemb
+TCASE_WEB_REQUEST_SELENIUM_SEND_MESSAGE_TO_ATEMB_COMPANY
+Send a message to the Atemb company
+and take a screenshot
+and close the browser
+and save the screenshot to the output folder</doc>
+<tag>atemb</tag>
+<tag>request</tag>
+<tag>selenium</tag>
+<tag>web</tag>
+<status status="PASS" start="2025-02-22T14:13:21.732033" elapsed="5.974266"/>
+</test>
+<status status="PASS" start="2025-02-22T14:13:21.380149" elapsed="6.328152"/>
+</suite>
+<status status="PASS" start="2025-02-22T14:13:21.376615" elapsed="6.335094"/>
+</suite>
+<status status="PASS" start="2025-02-22T14:13:21.371672" elapsed="6.342054"/>
+</suite>
+<status status="PASS" start="2025-02-22T14:13:21.333097" elapsed="6.382622"/>
+</suite>
+<statistics>
+<total>
+<stat pass="1" fail="0" skip="0">All Tests</stat>
+</total>
+<tag>
+<stat pass="1" fail="0" skip="0">atemb</stat>
+<stat pass="1" fail="0" skip="0">request</stat>
+<stat pass="1" fail="0" skip="0">selenium</stat>
+<stat pass="1" fail="0" skip="0">web</stat>
+</tag>
+<suite>
+<stat name="atembed-py-robotFramework" id="s1" pass="1" fail="0" skip="0">atembed-py-robotFramework</stat>
+<stat name="Atemb Release Suite" id="s1-s1" pass="1" fail="0" skip="0">atembed-py-robotFramework.Atemb Release Suite</stat>
+<stat name="01 TCASE WEB REQUEST SELENIUM" id="s1-s1-s1" pass="1" fail="0" skip="0">atembed-py-robotFramework.Atemb Release Suite.01 TCASE WEB REQUEST SELENIUM</stat>
+<stat name="03 TCASE WEB REQUEST SELENIUM SEND MESSAGE TO ATEMB COMPANY" id="s1-s1-s1-s1" pass="1" fail="0" skip="0">atembed-py-robotFramework.Atemb Release Suite.01 TCASE WEB REQUEST SELENIUM.03 TCASE WEB REQUEST SELENIUM SEND MESSAGE TO ATEMB COMPANY</stat>
+</suite>
+</statistics>
+<errors>
+</errors>
+</robot>

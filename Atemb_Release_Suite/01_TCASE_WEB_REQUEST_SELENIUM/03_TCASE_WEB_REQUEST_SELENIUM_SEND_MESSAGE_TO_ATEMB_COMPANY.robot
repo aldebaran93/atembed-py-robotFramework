@@ -4,10 +4,12 @@ Library    OperatingSystem
 
 *** Variables ***
 ${URL}    https://atemb-website.vercel.app/
-${COMPANY_NAME}    Atemb
-${COMPANY_EMAIL}    info@atemb.com
-${COMPANY_MESSAGE}    Hello, ${COMPANY_NAME}! I am interested in your services. Please contact me at ${COMPANY_EMAIL}.
-${OUTPUT_FOLDER}    ${CURDIR}${/}output${/}
+${SURNAME_FIELD}  xpath=//input[@name="surname"]  # Update locator if needed
+${NAME_FIELD}  xpath=//input[@name="name"]
+${EMAIL_FIELD}  xpath=//input[@name="email"]
+${MESSAGE_FIELD}  xpath=//textarea[@name="message"]
+${SEND_BUTTON}  xpath=//button[contains(text(),'Send Message')]
+${OUTPUT_FOLDER}    ${CURDIR}\\output\\
 ${SCREENSHOT_FILE}    ${OUTPUT_FOLDER}Atemb_Website.png
 
 *** Test Cases ***
@@ -23,15 +25,18 @@ TCASE_WEB_REQUEST_SELENIUM_SEND_MESSAGE_TO_ATEMB_COMPANY
     [Tags]    web    request    selenium    atemb
     [Setup]    Open Browser    ${URL}    edge
     Maximize Browser Window
-    Input Text    id=company_name    ${COMPANY_NAME}    clear=1
-    Input Text    id=company_email    ${COMPANY_EMAIL}    clear=1
-    Input Text    id=company_message    ${COMPANY_MESSAGE}    clear=1
+    Input Text    ${SURNAME_FIELD}    BETE
+    Input Text    ${NAME_FIELD}    Sylvie
+    Input Text    ${EMAIL_FIELD}    sylviebete2706@yahoo.com
+    Input Text    ${MESSAGE_FIELD}    Hello Atemb! I am Sylvie BETE. I would like to know more about your services.
+    Click Button    ${SEND_BUTTON}
     
-    Run Keyword If    '${OUTPUT_FOLDER}' != ''    Run Keyword    SAVE_SCREENSHOT    ${SCREENSHOT_FILE}
+    #Capture Page Screenshot    filename=${screenshot_file}
+    IF    $OUTPUT_FOLDER
+        Capture Page Screenshot    ${SCREENSHOT_FILE}
+    ELSE
+        Log    Output folder is not set
+        Create Dictionary    ${OUTPUT_FOLDER}
+        Capture Page Screenshot    ${SCREENSHOT_FILE}
+    END
     [Teardown]    Close Browser
-
-*** Keywords ***
-SAVE_SCREENSHOT
-    [Arguments]    ${file_path}
-    Capture Page Screenshot
-    Run Keyword If    '${file_path}' != ''    Save Screenshot    ${file_path}
