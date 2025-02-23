@@ -1,10 +1,11 @@
 *** Settings ***
 Library     SerialLibrary
 Library     String
+Library     ../../Atemb_Keywords_Library/python_library/FirmwareCustomLibrary.py    WITH NAME    pyFirmware
 
 *** Variables ***
 ${PORT}     COM3    #/dev/ttyUSB0 for Linux
-${BAUD}     115200
+${BAUD}     9600
 ${TIMEOUT}  1s
 
 *** Test Cases ***
@@ -29,10 +30,12 @@ SETUP_SERIAL_CONNECTION
     ...    2. The GPIO pin PA0 should be initialized as an output pin
     ...    copyright: Atemb
     [Tags]    GPIO
-    Open Serial Port    ${PORT}    baudrate=${BAUD}    timeout=${TIMEOUT}
-    Write Line    INIT_GPIO PA0 OUTPUT
-    Read Until    OK
-    [Teardown]    Close Serial Port
+    [Setup]    SerialLibrary.Com Port Should Exist Regexp    ${PORT}
+    ${CONNECTION}    pyFirmware.Open Serial Port
+    Should Contain    ${CONNECTION}    opened successfully
+    ${PIN_STATUS}    pyFirmware.Set Serial gpios    PA0    1
+    Should Contain    ${PIN_STATUS}    GPIO set
+    [Teardown]    local_teardown
 
 
 Test GPIO Set High
@@ -58,13 +61,14 @@ Test GPIO Set High
     ...    3. The test should pass
     ...    copyright: Atemb
     [Tags]    GPIO
-    [Setup]    Setup Serial Connection
-    Write Line    SET_PIN PA0 HIGH
-    Read Until    OK
-    Write Line    READ_PIN PA0
-    ${response}=    Read Until    HIGH
+    [Setup]    SerialLibrary.Com Port Should Exist Regexp    ${PORT}
+    ${CONNECTION}    pyFirmware.Open Serial Port
+    Should Contain    ${CONNECTION}    opened successfully
+    pyFirmware.Set Serial gpios    PA0    1
+    ${response}    pyFirmware.Serial gpios Status    HIGH
+    Log    ${response}
     Should Be Equal    ${response}    HIGH
-    [Teardown]    Close Serial Port
+    [Teardown]    local_teardown
 
 Test GPIO Set Low
     [Documentation]    Test the GPIO set low command
@@ -90,13 +94,14 @@ Test GPIO Set Low
     ...    3. The test should pass
     ...    copyright: Atemb
     [Tags]    GPIO
-    [Setup]    Setup Serial Connection
-    Write Line    SET_PIN PA0 LOW
-    Read Until    OK
-    Write Line    READ_PIN PA0
-    ${response}=    Read Until    LOW
+    [Setup]    SerialLibrary.Com Port Should Exist Regexp    ${PORT}
+    ${CONNECTION}    pyFirmware.Open Serial Port
+    Should Contain    ${CONNECTION}    opened successfully
+    pyFirmware.Set Serial gpios    PA0    0
+    ${response}    pyFirmware.Serial gpios Status    LOW
+    Log    ${response}
     Should Be Equal    ${response}    LOW
-    [Teardown]    Close Serial Port
+    [Teardown]    local_teardown
 
 Test GPIO Interrupt Handling
     [Documentation]    Test the GPIO interrupt handling
@@ -121,11 +126,25 @@ Test GPIO Interrupt Handling
     ...    3. The test should pass
     ...    copyright: Atemb
     [Tags]    GPIO
-    [Setup]    Setup Serial Connection
-    Write Line    ENABLE_INTERRUPT PA1 RISING
-    Read Until    OK
-    Sleep    0.5s    # Simulate external trigger
-    Write Line    CHECK_INTERRUPT PA1
-    ${response}=    Read Until    TRIGGERED
-    Should Be Equal    ${response}    TRIGGERED
-    [Teardown]    Close Serial Port
+    [Setup]    SerialLibrary.Com Port Should Exist Regexp    ${PORT}
+    ${CONNECTION}    pyFirmware.Open Serial Port
+    Should Contain    ${CONNECTION}    opened successfully
+    ${GPIO_STATUS}    pyFirmware.Set Serial gpios    PA1    1
+    Should Be Equal    ${GPIO_STATUS}    GPIO set
+    ${RESPONSE}=    pyFirmware.Write Serial    message="hello there Atemb is a firm specialized in embedded systems and test automation"
+    Should Be Equal    ${RESPONSE}    Message sent
+    ${TEST_MESSAGE}    pyFirmware.Read Serial
+    Should Be Equal    ${TEST_MESSAGE}    hello there Atemb is a firm specialized in embedded systems and test automation
+    [Teardown]    local_teardown
+
+*** Keywords ***
+local_teardown
+    [Documentation]    Close the serial port
+    ...    This keyword will close the serial port.
+    ...    @Author: Atemb
+    ...    @Date: 2025-02-01
+    ...    @Version: 1.0
+    ...    copyright: Atemb
+    [Tags]    GPIO
+    ${PORT_STATUS}    pyFirmware.Close Serial Port
+    Should Contain    ${PORT_STATUS}    Serial port ${PORT} closed
