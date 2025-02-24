@@ -178,10 +178,78 @@ class FirmwareCustomLibrary(object):
         self.log_capture.truncate(0)  # Clear the buffer
         return logs
     
-    def list_core_registers(self):
+    def read_core_registers(self, register):
+        board = self.session.board
+        target = board.target
+        value = hex(target.read_core_register(register))
+        if value is None:
+            return None
+        else:
+            return value
+        #print(f"{reg}: 0x{value:08X}")
+    
+    def write_core_registers(self, registers):
         board = self.session.board
         target = board.target
 
-        # List core register names
-        core_registers = target.read_core_registers()
-        return core_registers
+        # Write core registers
+        target.write_core_registers(registers)
+        return "Core registers written."
+    
+    def read_memory_block(self, address, length):
+        '''Reads a block of memory.'''
+        board = self.session.board
+        target = board.target
+        memory_map = target.memory_map
+        memory = memory_map.get_region_for_address(address)
+        data = memory.read_block8(address, length)
+        return data
+    
+    def write_memory_block(self, address, data):
+        # Convert address to integer if it's a string
+        if isinstance(address, str):
+            address = int(address, 16)
+        if data < 0 or data > 0xFF:
+            raise ValueError(f"Value 0x{data:02X} is not a valid byte.")
+        word_address = address & ~0x3  # Mask lower 2 bits to get the word-aligned address
+        offset = address & 0x3         # Byte offset within the word
+        existing_word = self.target.read32(word_address)
+        modified_word = (existing_word & ~(0xFF << (offset * 8))) | (data << (offset * 8))
+        self.target.write32(word_address, modified_word)
+        logging.info(f"Memory block written at address 0x{address:08X}.")
+    
+    def read_memory_block_as_hex(self, address, length):
+        '''Reads a block of memory and returns it as a hex string.'''
+        data = self.read_memory_block(address, length)
+        return data.hex()
+    
+    def read_memory_block_as_string(self, address, length):
+        '''Reads a block of memory and returns it as a string.'''
+        data = self.read_memory_block(address, length)
+        return data.decode()
+    
+    def read_memory_block_as_int(self, address, length):
+        '''Reads a block of memory and returns it as an integer.'''
+        data = self.read_memory_block(address, length)
+        return int.from_bytes(data, byteorder='big')
+    
+    def write_memory_block_as_hex(self, address, data):
+        '''Writes a block of memory from a hex string.'''
+        if isinstance(data, str):
+            data = bytes.fromhex(data)
+        elif isinstance(data, int):
+            data = data.to_bytes((data.bit_length() + 7) // 8, byteorder='big')
+        self.write_memory_block(address, data)
+        return "Memory block written."
+    
+    def write_memory_block_as_string(self, address, data):
+        '''Writes a block of memory from a string.'''
+        data = data.encode()
+        self.write_memory_block(address, data)
+        return "Memory block written."
+    
+    def write_memory_block_as_int(self, address, data):
+        '''Writes a block of memory from an integer.'''
+        data = data.to_bytes((data.bit_length() + 7) // 8, byteorder='big')
+        self.write_memory_block(address, data)
+        return "Memory block written."
