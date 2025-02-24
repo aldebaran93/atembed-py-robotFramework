@@ -1,8 +1,8 @@
-import os
-import sys
-import paramiko
 import serial
 import time
+from pyocd.core.helpers import ConnectHelper
+from pyocd.flash.file_programmer import FileProgrammer
+import logging
 
 class FirmwareCustomLibrary(object):
     ROBOT_LIBRARY_SCOPE = 'SUITE'
@@ -12,6 +12,9 @@ class FirmwareCustomLibrary(object):
         self.baudrate = baudrate
         self.timeout = timeout
         self.ser = None
+        self.target = None
+        self.board = None
+        self.flash = None
 
     def open_serial_port(self):
         """Opens the serial port."""
@@ -75,3 +78,60 @@ class FirmwareCustomLibrary(object):
                     print(f"{gpio} is HIGH")
                 else:
                     print(f"{gpio} is LOW")
+
+    def connect_to_target(self):
+        '''Connects to the target.'''
+        logging.basicConfig(level=logging.INFO)
+        with ConnectHelper.session_with_chosen_probe(unique_id=None) as session:
+            self.target = self.board.target
+            self.board = session.board
+            self.flash = self.target.memory_map.get_boot_memory()
+            return "Connected to target"
+
+    def load_binary_file(self, file):
+        '''Loads a binary file to the target.'''
+        FileProgrammer(self.target).program(file)
+        return "Binary file loaded"
+
+    def reset_target(self):
+        '''Resets the target.'''
+        self.target.reset()
+        time.sleep(1)
+        return "Target reset."
+
+    def disconnect_from_target(self):
+        '''Disconnects from the target.'''
+        self.target.resume()
+        self.target.session.probe.close()
+        return "Disconnected from target."
+    
+    def erase_target(self):
+        '''Erases the target.'''
+        self.flash.erase_all()
+        return "Target erased."
+    
+    def write_memory(self, address, data):
+        '''Writes data to the target memory.'''
+        self.flash.program(address, data)
+        return "Memory written."
+    
+    def read_memory(self, address, length):
+        '''Reads data from the target memory.'''
+        return self.flash.read(address, length)
+    
+    def read_memory_as_hex(self, address, length):
+        '''Reads data from the target memory and returns it as a hex string.'''
+        return self.flash.read(address, length).hex()
+    
+    def read_memory_as_string(self, address, length):
+        '''Reads data from the target memory and returns it as a string.'''
+        return self.flash.read(address, length).decode()
+    
+    def read_memory_as_int(self, address, length):
+        '''Reads data from the target memory and returns it as an integer.'''
+        return int.from_bytes(self.flash.read(address, length), byteorder='big')
+    
+    def read_register(self, register):
+        '''Reads a register value.'''
+        self.target.reset_and_halt()
+        return self.target.read_core_register(register)
