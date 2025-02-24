@@ -3,6 +3,7 @@ import time
 from pyocd.core.helpers import ConnectHelper
 from pyocd.flash.file_programmer import FileProgrammer
 import logging
+import io
 
 class FirmwareCustomLibrary(object):
     ROBOT_LIBRARY_SCOPE = 'SUITE'
@@ -15,6 +16,8 @@ class FirmwareCustomLibrary(object):
         self.target = None
         self.board = None
         self.flash = None
+        self.log_capture = io.StringIO()  # Buffer to capture logs
+        self.setup_logging()
 
     def open_serial_port(self):
         """Opens the serial port."""
@@ -80,35 +83,58 @@ class FirmwareCustomLibrary(object):
                     print(f"{gpio} is LOW")
 
     def connect_to_target(self):
-        '''Connects to the target.'''
-        logging.basicConfig(level=logging.INFO)
-        with ConnectHelper.session_with_chosen_probe(unique_id=None) as session:
-            self.target = self.board.target
-            self.board = session.board
-            self.flash = self.target.memory_map.get_boot_memory()
-            return "Connected to target"
+        """Establish a connection to the STM32 microcontroller."""
+        self.session = ConnectHelper.session_with_chosen_probe()
+        self.session.open()
+        self.board = self.session.board
+        self.target = self.board.target
+        self.flash = self.target.memory_map.get_boot_memory()
+        logging.info("Connected to the STM32 microcontroller.")
+        logging.getLogger().handlers[0].flush()  # Flush the logs
 
-    def load_binary_file(self, file):
-        '''Loads a binary file to the target.'''
-        FileProgrammer(self.target).program(file)
-        return "Binary file loaded"
+    def erase_firmware_from_target(self):
+        """Erase the flash memory of the STM32 microcontroller."""
+        if not self.session:
+            raise RuntimeError("Not connected to the STM32 microcontroller.")
+        self.flash.mass_erase()
+        logging.info("Flash memory erased.")
 
-    def reset_target(self):
-        '''Resets the target.'''
-        self.target.reset()
-        time.sleep(1)
-        return "Target reset."
+    def flash_firmware_to_target(self, firmware_path):
+        """Flash firmware to the STM32 microcontroller."""
+        if not self.session:
+            raise RuntimeError("Not connected to the STM32 microcontroller.")
+        FileProgrammer(self.session).program(firmware_path)
+        logging.info(f"Firmware flashed from {firmware_path}.")
+
+    def read_register(self, register_name):
+        """Read a core register from the STM32 microcontroller."""
+        if not self.session:
+            raise RuntimeError("Not connected to the STM32 microcontroller.")
+        value = self.target.read_core_register(register_name)
+        logging.info(f"Register {register_name}: 0x{value:X}")
+        return value
+
+    def write_register(self, register_name, value):
+        """Write a value to a core register of the STM32 microcontroller."""
+        if not self.session:
+            raise RuntimeError("Not connected to the STM32 microcontroller.")
+        self.target.write_core_register(register_name, value)
+        logging.info(f"Register {register_name} set to 0x{value:X}.")
+
+    def reset_and_halt_target(self):
+        """Reset the STM32 microcontroller."""
+        if not self.session:
+            raise RuntimeError("Not connected to the STM32 microcontroller.")
+        self.target.reset_and_halt()
+        logging.info("STM32 microcontroller reset.")
 
     def disconnect_from_target(self):
-        '''Disconnects from the target.'''
-        self.target.resume()
-        self.target.session.probe.close()
-        return "Disconnected from target."
-    
-    def erase_target(self):
-        '''Erases the target.'''
-        self.flash.erase_all()
-        return "Target erased."
+        """Close the connection to the STM32 microcontroller."""
+        if self.session:
+            self.session.close()
+            logging.info("Connection closed.")
+        else:
+            logging.warning("No active connection to close.")
     
     def write_memory(self, address, data):
         '''Writes data to the target memory.'''
@@ -135,3 +161,27 @@ class FirmwareCustomLibrary(object):
         '''Reads a register value.'''
         self.target.reset_and_halt()
         return self.target.read_core_register(register)
+    
+    def setup_logging(self):
+        """Set up logging to capture logs into a buffer."""
+        self.log_capture = io.StringIO()  # Reinitialize the buffer
+        logging.basicConfig(
+            level=logging.INFO,
+            handlers=[logging.StreamHandler(self.log_capture)],
+            force=True  # Override any existing logging configuration
+        )
+
+    def get_function_logs(self):
+        """Return the captured logs as a string."""
+        logs = self.log_capture.getvalue()
+        self.log_capture.seek(0)  # Reset the buffer position
+        self.log_capture.truncate(0)  # Clear the buffer
+        return logs
+    
+    def list_core_registers(self):
+        board = self.session.board
+        target = board.target
+
+        # List core register names
+        core_registers = target.read_core_registers()
+        return core_registers
