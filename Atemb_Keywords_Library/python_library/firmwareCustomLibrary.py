@@ -96,7 +96,7 @@ class FirmwareCustomLibrary(object):
         """Erase the flash memory of the STM32 microcontroller."""
         if not self.session:
             raise RuntimeError("Not connected to the STM32 microcontroller.")
-        self.flash.mass_erase()
+        self.flash.erase_all()
         logging.info("Flash memory erased.")
 
     def flash_firmware_to_target(self, firmware_path):
@@ -105,14 +105,39 @@ class FirmwareCustomLibrary(object):
             raise RuntimeError("Not connected to the STM32 microcontroller.")
         FileProgrammer(self.session).program(firmware_path)
         logging.info(f"Firmware flashed from {firmware_path}.")
+        self.reset_target()
+        
+    def reset_target(self):
+        """Reset the STM32 microcontroller."""
+        if not self.session:
+            raise RuntimeError("Not connected to the STM32 microcontroller.")
+        self.target.reset()
+        logging.info("STM32 microcontroller reset.")
 
     def read_register(self, register_name):
         """Read a core register from the STM32 microcontroller."""
+        values = []
         if not self.session:
             raise RuntimeError("Not connected to the STM32 microcontroller.")
-        value = self.target.read_core_register(register_name)
-        logging.info(f"Register {register_name}: 0x{value:X}")
-        return value
+        self.target.reset_and_halt()
+        value1 = self.target.read_core_register(register_name)
+        logging.info(f"Register {register_name}: 0x{value1:X}")
+        self.target.step()
+        value2 = self.target.read_core_register(register_name)
+        logging.info(f"Register {register_name}: 0x{value2:X}")
+        self.target.resume()
+        time.sleep(0.2)
+        self.target.halt()
+        value3 = self.target.read_core_register(register_name)
+        logging.info(f"Register {register_name}: 0x{value3:X}")
+        values.extend([value1, value2, value3])
+        registers_values = set(values)
+        if len(registers_values) == len(values):
+            logging.info(f"Register {register_name} has different value.")
+        else:
+            logging.warning(f"Register {register_name} has same values.")
+        self.target.resume()
+        return values
 
     def write_register(self, register_name, value):
         """Write a value to a core register of the STM32 microcontroller."""
@@ -134,7 +159,7 @@ class FirmwareCustomLibrary(object):
             self.session.close()
             logging.info("Connection closed.")
         else:
-            logging.warning("No active connection to close.")
+            logging.info("No active connection to close.")
     
     def write_memory(self, address, data):
         '''Writes data to the target memory.'''
@@ -156,11 +181,6 @@ class FirmwareCustomLibrary(object):
     def read_memory_as_int(self, address, length):
         '''Reads data from the target memory and returns it as an integer.'''
         return int.from_bytes(self.flash.read(address, length), byteorder='big')
-    
-    def read_register(self, register):
-        '''Reads a register value.'''
-        self.target.reset_and_halt()
-        return self.target.read_core_register(register)
     
     def setup_logging(self):
         """Set up logging to capture logs into a buffer."""
@@ -200,9 +220,7 @@ class FirmwareCustomLibrary(object):
         '''Reads a block of memory.'''
         board = self.session.board
         target = board.target
-        memory_map = target.memory_map
-        memory = memory_map.get_region_for_address(address)
-        data = memory.read_block8(address, length)
+        data = target.read_memory_block8(address, length)
         return data
     
     def write_memory_block(self, address, data):

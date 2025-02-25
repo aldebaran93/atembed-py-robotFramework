@@ -7,6 +7,7 @@ Library     ../../Atemb_Keywords_Library/python_library/FirmwareCustomLibrary.py
 *** Variables ***
 ${PORT}     COM3    #/dev/ttyUSB0 for Linux
 ${FIRMWARE_FILE}    ${CURDIR}${/}atemb_stm32f401re.bin
+${REGISTER}    pc
 
 *** Test Cases ***
 CONNECT_TO_TARGET_WITH_OCD
@@ -47,8 +48,8 @@ PERFORM_FIRMWARE_UPDATE
     [Setup]    pyBaseFirmware.Connect To Target
     pyBaseFirmware.Flash Firmware To Target    ${FIRMWARE_FILE}
     ${UPDATE_STATUS}    get_function_logs
-    Should Contain    ${UPDATE_STATUS}    Firmware flashed from ${FIRMWARE_FILE}
     Sleep    30s
+    Should Contain    ${UPDATE_STATUS}    Firmware flashed from ${FIRMWARE_FILE}
     [Teardown]    local_teardown
 
 PERFORM_FLASH_ERASE
@@ -90,9 +91,11 @@ READ_REGISTERS_VALUES
     ...    1. The registers should be listed successfully
     [Tags]    OCD
     [Setup]    pyBaseFirmware.Connect To Target
-    ${REGISTERS}    pyBaseFirmware.Read Core Registers    register=pc
-    Should Not Be Empty    ${REGISTERS}
-    Log    ${REGISTERS} is the value of the register
+    ${REGISTERS}    pyBaseFirmware.Read Register    ${REGISTER}
+    Should Not Be Empty   ${REGISTERS}
+    Log    ${REGISTERS}
+    ${LOG_OUTPUT}    get_function_logs
+    Should Contain    ${LOG_OUTPUT}    Register ${REGISTER} has different value.
     [Teardown]    local_teardown
 
 WRITE_MEMORY_BLOCK_VALUES
@@ -135,7 +138,7 @@ READ_MEMORY_BLOCK_VALUES
     ...    1. The memory block values should be read successfully
     [Tags]    OCD
     [Setup]    pyBaseFirmware.Connect To Target
-    ${MEMORY_BLOCK}    pyBaseFirmware.Read Memory Block    ${0x08000000}    ${16}
+    ${MEMORY_BLOCK}    pyBaseFirmware.Read Memory Block    ${0x08000000}    ${0x0A}
     Should Not Be Empty    ${MEMORY_BLOCK}
     Log    ${MEMORY_BLOCK} is the memory block values
     [Teardown]    local_teardown
@@ -143,6 +146,9 @@ READ_MEMORY_BLOCK_VALUES
 
 *** Keywords ***
 local_teardown
+    [Documentation]    Disconnect from the target
+    ...    This keyword will disconnect from the target.
+    pyBaseFirmware.Reset Target
     pyBaseFirmware.Disconnect From Target
     ${CONNECTION}    get_function_logs
     Should Contain    ${CONNECTION}    Connection closed.
