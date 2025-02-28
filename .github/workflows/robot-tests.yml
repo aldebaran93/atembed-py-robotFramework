@@ -33,4 +33,4 @@ jobs:
 
       # Run Robot Framework tests
       - name: Run tests
-        run: robot Atemb_Release_Suite/  # Replace with the path to your test files
+        run: robot --pythonpath Atemb_Keywords_Library/python_library Atemb_Release_Suite/  # Replace with the path to your test files
