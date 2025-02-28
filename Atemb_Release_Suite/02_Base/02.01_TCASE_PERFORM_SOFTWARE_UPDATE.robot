@@ -71,7 +71,7 @@ PERFORM_FLASH_ERASE
     [Setup]    pyBaseFirmware.Connect To Target
     pyBaseFirmware.Erase Firmware From Target
     ${ERASE_STATUS}    get_function_logs
-    Should Contain    ${ERASE_STATUS}    Flash memory erased.
+    Should Contain    ${ERASE_STATUS}    Flash memory erased
     [Teardown]    local_teardown
 
 READ_REGISTERS_VALUES
