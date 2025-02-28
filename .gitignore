@@ -2,9 +2,3 @@
 results/output.xml
 results/log.html
 results/report.html
-# Ignore Robot Framework cache files
-.cache/
-# Ignore Robot Framework logs
-*.log
-# Ignore Robot Framework screenshots
-*.png
