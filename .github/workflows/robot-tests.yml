@@ -34,6 +34,7 @@ jobs:
           # Add any additional libraries you need, e.g., SeleniumLibrary
           pip install robotframework-seleniumlibrary
           pip install pyserial
+          pip install pyocd
       - name: Set PYTHONPATH
         run: echo "PYTHONPATH=Atemb_Keywords_Library/python_library" >> $GITHUB_ENV
 
