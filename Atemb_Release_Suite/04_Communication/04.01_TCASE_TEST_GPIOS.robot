@@ -65,9 +65,9 @@ Test GPIO Set High
     ${CONNECTION}    pyFirmware.Open Serial Port
     Should Contain    ${CONNECTION}    opened successfully
     pyFirmware.Set Serial gpios    PA0    1
-    ${response}    pyFirmware.Serial gpios Status    HIGH
+    ${response}    pyFirmware.Serial gpios Status    0x01
     Log    ${response}
-    Should Be Equal    ${response}    HIGH
+    Should Be Equal    ${response}    0x01
     [Teardown]    local_teardown
 
 Test GPIO Set Low
@@ -98,9 +98,9 @@ Test GPIO Set Low
     ${CONNECTION}    pyFirmware.Open Serial Port
     Should Contain    ${CONNECTION}    opened successfully
     pyFirmware.Set Serial gpios    PA0    0
-    ${response}    pyFirmware.Serial gpios Status    LOW
+    ${response}    pyFirmware.Serial gpios Status    0x00
     Log    ${response}
-    Should Be Equal    ${response}    LOW
+    Should Be Equal    ${response}    0x00
     [Teardown]    local_teardown
 
 Test GPIO Interrupt Handling
