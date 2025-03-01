@@ -33,6 +33,7 @@ jobs:
           #pip install serial
           # Add any additional libraries you need, e.g., SeleniumLibrary
           pip install robotframework-seleniumlibrary
+          pip install pyserial
 
       # Run Robot Framework tests
       - name: Run tests
