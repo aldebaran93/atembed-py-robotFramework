@@ -21,18 +21,19 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: '3.13'  # Specify your Python version
+          python-version: '3.9'  # Specify your Python version
 
       # Install Robot Framework and dependencies
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
           #pip install -r requirements.txt
+          pip install robotframework
           pip install robotframework-seriallibrary
-          pip install serial
+          #pip install serial
           # Add any additional libraries you need, e.g., SeleniumLibrary
           pip install robotframework-seleniumlibrary
 
       # Run Robot Framework tests
       - name: Run tests
-        run: robot --pythonpath Atemb_Keywords_Library/python_library Atemb_Release_Suite/  # Replace with the path to your test files
+        run: robot Atemb_Release_Suite/  # Replace with the path to your test files --pythonpath Atemb_Keywords_Library/python_library
