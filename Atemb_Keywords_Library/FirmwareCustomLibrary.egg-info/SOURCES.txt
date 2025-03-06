@@ -1,0 +1,7 @@
+setup.py
+FirmwareCustomLibrary.egg-info/PKG-INFO
+FirmwareCustomLibrary.egg-info/SOURCES.txt
+FirmwareCustomLibrary.egg-info/dependency_links.txt
+FirmwareCustomLibrary.egg-info/top_level.txt
+python_library/FirmwareCustomLibrary.py
+python_library/__init__.py

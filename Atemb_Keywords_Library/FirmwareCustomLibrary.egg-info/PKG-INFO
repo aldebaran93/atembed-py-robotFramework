@@ -1,0 +1,16 @@
+Metadata-Version: 2.2
+Name: FirmwareCustomLibrary
+Version: 0.1.0
+Summary: A custom firmware library for Robot Framework
+Home-page: https://github.com/yourusername/atembed-py-robotFramework
+Author: Evrard Amindjou Tsafack
+Author-email: tsafackleo@yahoo.com
+Classifier: Programming Language :: Python :: 3
+Classifier: Operating System :: OS Independent
+Requires-Python: >=3.6
+Dynamic: author
+Dynamic: author-email
+Dynamic: classifier
+Dynamic: home-page
+Dynamic: requires-python
+Dynamic: summary
