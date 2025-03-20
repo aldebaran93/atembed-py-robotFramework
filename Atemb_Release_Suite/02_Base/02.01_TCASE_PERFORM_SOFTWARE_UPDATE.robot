@@ -143,6 +143,28 @@ READ_MEMORY_BLOCK_VALUES
     Log    ${MEMORY_BLOCK} is the memory block values
     [Teardown]    local_teardown
 
+WRITE_REGISTER_VALUES
+    [Documentation]    write register values
+    ...    This keyword will write register values on the target.
+    ...    here we will write the register values to the target.
+    ...    @Author: Atemb
+    ...    @Date: 2025-02-01
+    ...    @Version: 1.0
+    ...    @TestType: Functional
+    ...    @TestPriority: High
+    ...    @TestStatus: Ready
+    ...    @TestPreconditions: The target should be connected with OCD
+    ...    @TestSteps:
+    ...    1. Write register values
+    ...    @TestExpectedResults:
+    ...    1. The register values should be written successfully
+    [Tags]    OCD
+    [Setup]    pyBaseFirmware.Connect To Target
+    pyBaseFirmware.Write Register    ${REGISTER}    ${0x0A}
+    ${REGISTER_VALUE}    pyBaseFirmware.Read Register    ${REGISTER}
+    Log    ${REGISTER_VALUE} are the value of the register ${REGISTER}
+    Should Not Be Empty    ${REGISTER_VALUE}
+    [Teardown]    local_teardown
 
 *** Keywords ***
 local_teardown
