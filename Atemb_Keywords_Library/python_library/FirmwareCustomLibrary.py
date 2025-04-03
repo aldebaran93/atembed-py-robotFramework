@@ -1,3 +1,28 @@
+
+# -*- coding: utf-8 -*-
+'''
+@package firmwareCustomLibrary
+@file firmwareCustomLibrary.py
+@brief
+This is a custom library for STM32 microcontroller firmware management.
+This library provides a set of functionalities to interact with STM32 microcontrollers 
+and manage serial communication. It includes methods for opening and closing serial ports, 
+reading and writing data over serial, controlling GPIOs, flashing firmware, reading and 
+writing memory, and interacting with core registers of the microcontroller. The library 
+is designed to be used with Robot Framework and has a suite-level scope.
+Features:
+- Serial communication with STM32 microcontrollers.
+- GPIO control and status monitoring.
+- Flash memory management (erase, program, read).
+- Core register read/write operations.
+- Memory read/write operations in various formats (hex, string, integer).
+- Logging support for capturing and retrieving logs.
+Author:
+Evrard Amindjou Tsafack
+Date:
+2023-10-04
+'''
+
 import serial
 import time
 from pyocd.core.helpers import ConnectHelper
